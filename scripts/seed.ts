@@ -46,6 +46,58 @@ db.exec(accountsTable);
 db.exec(journalTable);
 db.exec(linesTable);
 
+// Create customers table
+const customersTable = `
+CREATE TABLE IF NOT EXISTS customers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  address TEXT,
+  city TEXT,
+  country TEXT,
+  tax_id TEXT,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  updated_at INTEGER NOT NULL DEFAULT (unixepoch())
+)`;
+
+// Create invoices table
+const invoicesTable = `
+CREATE TABLE IF NOT EXISTS invoices (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  invoice_number TEXT NOT NULL UNIQUE,
+  customer_id INTEGER NOT NULL,
+  issue_date INTEGER NOT NULL,
+  due_date INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'draft',
+  subtotal REAL NOT NULL DEFAULT 0,
+  tax_rate REAL NOT NULL DEFAULT 0,
+  tax_amount REAL NOT NULL DEFAULT 0,
+  total_amount REAL NOT NULL DEFAULT 0,
+  amount_paid REAL NOT NULL DEFAULT 0,
+  notes TEXT,
+  terms TEXT,
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  updated_at INTEGER NOT NULL DEFAULT (unixepoch())
+)`;
+
+// Create invoice items table
+const invoiceItemsTable = `
+CREATE TABLE IF NOT EXISTS invoice_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  invoice_id INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  quantity REAL NOT NULL DEFAULT 1,
+  unit_price REAL NOT NULL DEFAULT 0,
+  amount REAL NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL DEFAULT (unixepoch())
+)`;
+
+db.exec(customersTable);
+db.exec(invoicesTable);
+db.exec(invoiceItemsTable);
+
 // Seed default accounts
 const defaultAccounts = [
   { code: "1000", name: "Cash", type: "asset", subtype: "Current", openingBalance: 0 },

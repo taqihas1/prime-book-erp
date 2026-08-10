@@ -15,10 +15,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Scale,
+  Users,
 } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Customers", href: "/customers", icon: Users },
+  { name: "Invoices", href: "/invoices", icon: FileText },
   { name: "Chart of Accounts", href: "/accounts", icon: BookOpen },
   { name: "Journal Entries", href: "/journal", icon: FileText },
   { name: "General Ledger", href: "/ledger", icon: BookOpen },

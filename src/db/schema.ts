@@ -40,5 +40,56 @@ export const journalEntryLines = sqliteTable("journal_entry_lines", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 
+// Customers
+export const customers = sqliteTable("customers", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  address: text("address"),
+  city: text("city"),
+  country: text("country"),
+  taxId: text("tax_id"),
+  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+});
+
+// Invoices
+export const invoiceStatus = ["draft", "sent", "paid", "overdue", "cancelled"] as const;
+export type InvoiceStatus = (typeof invoiceStatus)[number];
+
+export const invoices = sqliteTable("invoices", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  invoiceNumber: text("invoice_number").notNull().unique(),
+  customerId: integer("customer_id").notNull(),
+  issueDate: integer("issue_date", { mode: "timestamp" }).notNull(),
+  dueDate: integer("due_date", { mode: "timestamp" }).notNull(),
+  status: text("status", { enum: invoiceStatus }).notNull().default("draft"),
+  subtotal: real("subtotal").notNull().default(0),
+  taxRate: real("tax_rate").notNull().default(0),
+  taxAmount: real("tax_amount").notNull().default(0),
+  totalAmount: real("total_amount").notNull().default(0),
+  amountPaid: real("amount_paid").notNull().default(0),
+  notes: text("notes"),
+  terms: text("terms"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+});
+
+// Invoice Line Items
+export const invoiceItems = sqliteTable("invoice_items", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  invoiceId: integer("invoice_id").notNull(),
+  description: text("description").notNull(),
+  quantity: real("quantity").notNull().default(1),
+  unitPrice: real("unit_price").notNull().default(0),
+  amount: real("amount").notNull().default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+});
+
 export type Account = typeof accounts.$inferSelect;
 export type NewAccount = typeof accounts.$inferInsert;
+export type Customer = typeof customers.$inferSelect;
+export type Invoice = typeof invoices.$inferSelect;
+export type InvoiceItem = typeof invoiceItems.$inferSelect;
