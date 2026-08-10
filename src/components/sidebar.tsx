@@ -14,12 +14,15 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Scale,
 } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Chart of Accounts", href: "/accounts", icon: BookOpen },
   { name: "Journal Entries", href: "/journal", icon: FileText },
+  { name: "General Ledger", href: "/ledger", icon: BookOpen },
+  { name: "Trial Balance", href: "/reports/trial-balance", icon: Scale },
   { name: "Settings", href: "#", icon: Settings },
 ];
 
